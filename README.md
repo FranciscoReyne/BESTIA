@@ -27,9 +27,7 @@ AI-powered animal tracking has been successfully applied in conservation, livest
 Future advancements in AI tracking may involve multimodal sensor integration, improved deep learning models, and enhanced real-time processing capabilities. As technology evolves, these tools will redefine how animal populations are studied and managed.
 
 
-#### **7. Conclusions and Future of AI-Based Video Analysis**  
-
-### **Chapter 5: Tracking and Counting Methods**  
+### **Tracking and Counting Methods**  
 Tracking animals in video is a key challenge in automated counting. For salmon, the goal is to detect when they cross a specific line in the frame and register the event. This is achieved using computer vision algorithms that combine object detection with motion tracking. This chapter will explore techniques such as YOLO for detection and SORT for tracking, ensuring accurate counting even in variable lighting conditions and fast movement.
 
 ---
