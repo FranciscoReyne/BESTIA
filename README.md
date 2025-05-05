@@ -39,30 +39,36 @@ Here’s a prototype Python code snippet for counting salmon as they cross a def
 import cv2
 import numpy as np
 from ultralytics import YOLO
-from supervision import LineCounter, Point, VideoSink
+from supervision import LineCounter, Point
 
-# Load the trained YOLOv8 model for salmon detection
-model = YOLO("yolov8n.pt")  # Replace with your trained model
+# Load YOLOv8 model trained for salmon detection
+model = YOLO("yolov8n.pt")  # if you have one replace with your trained model file
 
 # Define the counting line
 line_start = Point(100, 300)  # Adjust based on your video
 line_end = Point(500, 300)
 line_counter = LineCounter(start=line_start, end=line_end)
 
-# Open video file
-video_path = "salmon_video.mp4"  # Replace with your video
+# Open the local video file
+video_path = "local_salmon_video.mp4"  # Replace with your local video file
 cap = cv2.VideoCapture(video_path)
 
-while cap.isOpened():
+# Check if video file opened correctly
+if not cap.isOpened():
+    print("Error: Could not open video file.")
+    exit()
+
+# Loop through video frames
+while True:
     ret, frame = cap.read()
     if not ret:
-        break
+        break  # End when the video finishes
 
     # Detect salmon in the frame
     results = model(frame)
     detections = results.xyxy[0].cpu().numpy()  # Extract detections
 
-    # Filter salmon detections
+    # Filter only salmon detections
     salmon_detections = [d for d in detections if d[-1] == "salmon"]  # Adjust based on class labels
 
     # Update line counter
@@ -72,12 +78,15 @@ while cap.isOpened():
         center_y = int((y1 + y2) / 2)
         line_counter.update(Point(center_x, center_y))
 
-    # Display count on screen
+    # Display frame with annotations
     frame = line_counter.annotate(frame)
     cv2.imshow("Salmon Tracking", frame)
+
+    # Press 'q' to exit
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
+# Release resources
 cap.release()
 cv2.destroyAllWindows()
 ```
